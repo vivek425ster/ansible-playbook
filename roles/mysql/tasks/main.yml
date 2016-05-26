@@ -1,0 +1,23 @@
+---
+# tasks file for mysql
+- name: Install MySQL
+  yum: name={{ item }} update_cache=yes state=present
+  sudo: yes
+  with_items:
+    - mysql-server
+    - MySQL-python.x86_64
+
+- name: Start mysql service
+  service: name=mysqld state=started enabled=yes
+  sudo: yes
+
+- name: Create mysql database
+  mysql_db: name={{ wp_mysql_db }} state=present
+  sudo: yes
+
+- name: Create mysql user
+  mysql_user: 
+    name={{ wp_mysql_user }} 
+    password={{ wp_mysql_password }} 
+    priv=*.*:ALL
+  sudo: yes
